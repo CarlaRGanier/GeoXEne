@@ -5,6 +5,11 @@ const proxy = require('express-http-proxy');
 const cache = require('apicache').middleware;
 const md5 = require('crypto-js/md5');
 const base64 = require ('crypto-js/enc-base64');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('database.db',sqlite3.OPEN_READWRITE);
+
+db.run(`INSERT INTO localization (address, lat, lng) VALUES ("Tombe 4, Nécropole au Nord de l'Eridanos, Kerameikos",37.97821996444386,23.71865999861794)`);
+
 
 const geocoding = {
   "Tombe 2, Nécropole au Nord de l'Eridanos, Kerameikos": { lat: 37.97824388117687, lng: 23.718648807908984 },
