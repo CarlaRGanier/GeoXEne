@@ -21,6 +21,22 @@
         margin: 0;
         padding: 0;
       }
+
+      .submitBtn {
+        padding: 5px 10px;
+        margin: 4px;
+        background-color: #9EDADE;
+        color: black;
+        border: none;
+        border-radius: 8px;
+        transition: 150ms;
+      }
+
+      .submitBtn:hover {
+        background-color: #3F898E;
+        transition: 150ms;
+      }
+
     </style>
     <script src="maps.js"></script>
   </head>
@@ -37,6 +53,7 @@
       </label>Address:
         <input type="text" id="title" required />
       </label>
+      <button type="submit" class="submitBtn">Add location</button>
     </form>
   </body>
 </html>

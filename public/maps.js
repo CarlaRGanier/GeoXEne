@@ -17,7 +17,11 @@ const settings = {
   ]
 };
 
+let marker;
+
 let createMap = (id) => new google.maps.Map(document.getElementById(id), settings.coverage);
+
+let isBlueMarkerOnTheMap = false;
 
 let fillForm = (latitude, longitude, title = '') => {
   document.getElementById('lat').value = latitude;
@@ -25,14 +29,40 @@ let fillForm = (latitude, longitude, title = '') => {
   document.getElementById('title').value = title;
 }
 
-let showLocation = (x) => {
-  fillForm(x.latLng.lat(), x.latLng.lng());
+let addMarker = (x, map) => {
+  this.marker = new google.maps.Marker({
+      map: map,
+      position: x.latLng,
+      icon: {
+        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      }
+  });
+}
+
+let removeMarker = () => {
+  this.marker.setMap(null);
+  this.marker = null;
+  fillForm(null, null);
+}
+
+let showLocation = (x, map) => {
+  if(isBlueMarkerOnTheMap === false) {
+    addMarker(x, map);
+    fillForm(x.latLng.lat(), x.latLng.lng());
+    isBlueMarkerOnTheMap = true;
+  } else {
+    removeMarker();
+    isBlueMarkerOnTheMap = false;
+  }
+  
 }
 
 let putOverlaysOnMap = (map) => settings.overlays.map(x => new google.maps.GroundOverlay(...x))
   .map(x => {
     x.setMap(map);
-    x.addListener('click', showLocation);
+    x.addListener('click', function(e) {
+      showLocation(e, map)
+    });
   });
 
 let getLocation = (address) => fetch(`/json?address=${address}`)
@@ -56,7 +86,9 @@ function putAddressesOnMap(map) {
 
 function initMap() {
   let map = createMap('map');
-  map.addListener('click', showLocation);
+  map.addListener('click', function(e) {
+    showLocation(e, map)
+  });
   putOverlaysOnMap(map);
   putAddressesOnMap(map);
 }
